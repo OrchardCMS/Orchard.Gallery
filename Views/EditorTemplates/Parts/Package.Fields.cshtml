@@ -1,0 +1,39 @@
+﻿@model Orchard.Gallery.Models.PackagePart
+
+<fieldset>
+    @Html.LabelFor(m => m.PackageId, T("Package Id"))
+    @Html.TextBoxFor(x => x.PackageId, new { @class = "text large required" })
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.Summary, T("Summary"))
+    @Html.TextBoxFor(x => x.Summary, new { @class = "text large" })
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.ExtensionType, T("Package Type"))
+    @Html.EnumDropDownListFor(x => x.ExtensionType)
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.ProjectUrl, T("Project Url"))
+    @Html.TextBoxFor(m => m.ProjectUrl, new { @class = "text large" })
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.License, T("License"))
+    @Html.TextBoxFor(m => m.License, new { @class = "text small" })
+    <span class="hint">@T("Type of license, e.g. MIT, BSD, ...")</span>
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.LicenseUrl, T("License Url"))
+    @Html.TextBoxFor(m => m.LicenseUrl, new { @class = "text large" })
+</fieldset>
+
+@if (AuthorizedFor(Orchard.Gallery.Permissions.ManageGallery)) {
+<fieldset>
+    @Html.LabelFor(m => m.DownloadCount, T("Download Count"))
+    @Html.TextBoxFor(m => m.DownloadCount, new { @class = "text small" })
+</fieldset>
+}

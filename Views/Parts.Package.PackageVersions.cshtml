@@ -1,0 +1,11 @@
+﻿@using Orchard.Gallery.Models;
+
+@{ 
+    PackagePart package = Model.Package;
+    IList<PackageVersionPart> packageVersions = Model.PackageVersions;
+}
+
+@foreach(var packageVersion in packageVersions) {
+    <div>@packageVersion.Version</div>
+}
+

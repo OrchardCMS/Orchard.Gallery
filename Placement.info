@@ -1,0 +1,39 @@
+﻿<Placement>
+
+  <Place Parts_Package_Fields_Edit="Content:5"/>
+  <Place Parts_PackageVersion_Fields_Edit="Content:5"/>
+
+  <Place Parts_Package_Fields="Content"/>
+  <Place Parts_Package_Fields_Summary="-"/>
+  <Place Parts_Package_Fields_SummaryAdmin="-"/>
+
+  <Match DisplayType="Summary">
+    <Place Parts_Package_Fields="-"/>
+    <Place Parts_Package_Fields_Summary="Content"/>
+    <Place Parts_Package_Fields_SummaryAdmin="-"/>
+    <Place Parts_Package_Versions="Content:10"/>    
+  </Match>
+
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_Package_Fields="-"/>
+    <Place Parts_Package_Fields_Summary="-"/>
+    <Place Parts_Package_Fields_SummaryAdmin="Content:after"/>
+  </Match>
+
+  <Place Parts_PackageVersion_Fields="Content"/>
+  <Place Parts_PackageVersion_Fields_Summary="-"/>
+  <Place Parts_PackageVersion_Fields_SummaryAdmin="-"/>
+
+  <Match DisplayType="Summary">
+    <Place Parts_PackageVersion_Fields="-"/>
+    <Place Parts_PackageVersion_Fields_Summary="Content"/>
+    <Place Parts_PackageVersion_Fields_SummaryAdmin="-"/>
+  </Match>
+
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_PackageVersion_Fields="-"/>
+    <Place Parts_PackageVersion_Fields_Summary="-"/>
+    <Place Parts_PackageVersion_Fields_SummaryAdmin="Content:after"/>
+  </Match>
+
+</Placement>

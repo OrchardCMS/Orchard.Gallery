@@ -1,0 +1,30 @@
+﻿@model Orchard.Gallery.ViewModels.EditPackageVersionViewModel
+
+<fieldset>
+    @Html.LabelFor(m => m.PackageId, T("Package"))
+    <select size="1" id="@Html.FieldIdFor(m => m.PackageId)" name="@Html.FieldNameFor(m => m.PackageId)">
+        @foreach (var package in Model.PackageParts) {
+            <option selected="@(package.Id == Model.PackageId)" value="@package.Id">@package.TitlePart.Title (@package.PackageId)</option>
+        }
+    </select>
+    <span class="hint">@T("Select which package this version should be added to.")</span>
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.PackageVersionPart.Version, T("Version"))
+    @Html.TextBoxFor(m => m.PackageVersionPart.Version, new { @class = "text small" })
+    <span class="hint">@T("The version in the form of <i>major.minor[.build[.revision]]</i>.")</span>
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.PackageVersionPart.PackageUrl, T("Package Url"))
+    @Html.TextBoxFor(m => m.PackageVersionPart.PackageUrl, new { @class = "text large" })
+    <span class="hint">@T("The url the package is downloaded from.")</span>
+</fieldset>
+
+@if (AuthorizedFor(Orchard.Gallery.Permissions.ManageGallery)) {
+<fieldset>
+    @Html.LabelFor(m => m.PackageVersionPart.DownloadCount, T("Download Count"))
+    @Html.TextBoxFor(m => m.PackageVersionPart.DownloadCount, new { @class = "text small" })
+</fieldset>
+}

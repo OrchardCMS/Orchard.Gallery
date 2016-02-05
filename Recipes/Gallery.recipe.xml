@@ -1,0 +1,102 @@
+﻿<?xml version="1.0"?>
+<!-- 
+TODO: 
+- Make Package/PackageVersion securable
+- Make Package draftable ?
+- Enable audit trail
+-->
+<Orchard>
+  <Recipe>
+    <Name>Package Gallery</Name>
+    <Description>Configures a packages gallery using the Orchard.Gallery module.</Description>
+    <Author>The Orchard Team</Author>
+    <WebSite>http://orchardproject.net</WebSite>
+    <Tags>developer</Tags>
+    <Version>1.0</Version>
+  </Recipe>
+
+  <Feature enable="Orchard.Gallery" />
+  <Feature enable="Markdown" />
+  
+  <Metadata>
+    <Types>
+      <Package TypeIndexing.Indexes="Packages" ContentTypeSettings.Creatable="True" ContentTypeSettings.Listable="True" ContentTypeSettings.Draftable="False" ContentTypeSettings.Securable="True" DisplayName="Package">
+        <Package />
+        <PackagePart />
+        <CommonPart OwnerEditorSettings.ShowOwnerEditor="true" DateEditorSettings.ShowDateEditor="false" />
+        <!-- Package description -->
+        <BodyPart BodyTypePartSettings.Flavor="Markdown" />
+        <!-- Package ID -->
+        <TitlePart />
+        <TagsPart />
+        <ContainerPart ContainerTypePartSettings.AdminListViewName="Default" ContainerTypePartSettings.EnablePositioning="False" ContainerTypePartSettings.RestrictItemContentTypes="True" ContainerTypePartSettings.RestrictedItemContentTypes="PackageVersion" ContainerTypePartSettings.PaginatedDefault="True" ContainerTypePartSettings.PageSizeDefault="10" ContainerTypePartSettings.ItemsShownDefault="True"/>
+        
+      </Package>
+
+      <PackageVersion TypeIndexing.Indexes="PackageVersions" ContentTypeSettings.Creatable="True" ContentTypeSettings.Listable="True" ContentTypeSettings.Draftable="False" ContentTypeSettings.Securable="True" DisplayName="Package Version">
+        <PackageVersionPart />
+        <CommonPart />
+        <!-- Changelog -->
+        <BodyPart BodyTypePartSettings.Flavor="Markdown" />
+        <ContainablePart ContainableTypePartSettings.ShowContainerPicker="False" ContainableTypePartSettings.ShowPositionEditor="False" />
+      </PackageVersion>
+
+      <CategoriesTerm Taxonomy="Categories" DisplayName="Categories Term">
+        <TermPart />
+        <TitlePart />
+        <AutoroutePart AutorouteSettings.AllowCustomPattern="true" AutorouteSettings.AutomaticAdjustmentOnEdit="false" AutorouteSettings.PatternDefinitions="[{Name:'Taxonomy and Title', Pattern: '{Content.Container.Path}/{Content.Slug}', Description: 'my-taxonomy/my-term/sub-term'}]" AutorouteSettings.DefaultPatternIndex="0" />
+        <CommonPart />
+      </CategoriesTerm>
+
+      <User>
+        <!-- To be able to add fields -->
+        <User/>
+      </User>
+
+    </Types>
+
+    <Parts>
+      <Package>
+        <Categories.TaxonomyField DisplayName="Categories" FieldIndexing.Included="True" TaxonomyFieldSettings.Taxonomy="Categories" TaxonomyFieldSettings.LeavesOnly="False" TaxonomyFieldSettings.Required="False" TaxonomyFieldSettings.SingleChoice="False" TaxonomyFieldSettings.Autocomplete="True" TaxonomyFieldSettings.AllowCustomTerms="False" TaxonomyFieldSettings.Hint="Please select the categories of the Module" />
+        <Screenshots.MediaLibraryPickerField DisplayName="Screenshots" MediaLibraryPickerFieldSettings.Required="False" MediaLibraryPickerFieldSettings.Multiple="True" MediaLibraryPickerFieldSettings.DisplayedContentTypes="Image" />
+        <Icon.MediaLibraryPickerField DisplayName="Icon" MediaLibraryPickerFieldSettings.Required="False" MediaLibraryPickerFieldSettings.Multiple="False" MediaLibraryPickerFieldSettings.DisplayedContentTypes="Image" />
+      </Package>
+
+      <PackagePart ContentPartSettings.Attachable="True" 
+                   ContentPartSettings.Description="Turns a content type into a Package."/>
+      
+      <PackageVersionPart ContentPartSettings.Attachable="True" 
+                          ContentPartSettings.Description="Turns a content type into a Package Version."/>
+
+      <!-- User profile information -->
+      <User ContentPartSettings.Attachable="True">
+        <DisplayName.TextField DisplayName="Display Name" TextFieldSettings.Required="False" TextFieldSettings.Flavor="Wide"/>
+        <Website.LinkField DisplayName="Website" LinkFieldSettings.LinkTextMode="Url" LinkFieldSettings.TargetMode="None" LinkFieldSettings.Required="False"/>
+      </User>
+    </Parts>
+  </Metadata>
+
+  <Command>
+    index create Packages
+    index update Packages
+
+    index create PackageVersions
+    index update PackageVersions
+  </Command>
+
+  <Data>
+
+    <Taxonomy Status="Published" Id="/alias=categories">
+      <CommonPart ModifiedUtc="2015-08-24T23:01:55.0440705Z" PublishedUtc="2015-08-24T23:01:55.1458496Z" CreatedUtc="2015-08-24T23:01:54.9339961Z" Owner="/User.UserName=admin"/>
+      <AutoroutePart UseCustomPattern="false" Alias="categories"/>
+      <TitlePart Title="Categories"/>
+      <TaxonomyPart TermTypeName="Categories"/>
+    </Taxonomy>
+
+  </Data>
+
+  <Roles>
+    <Role Name="Contributor" Permissions="AccessAdminPanel,PublishOwn_Package,EditOwn_Package,DeleteOwn_Package,PublishOwn_PackageVersion,EditOwn_PackageVersion,DeleteOwn_PackageVersion,PreviewOwnContent,ManageOwnMedia,EditOwnBlogPost,AddComment" />
+  </Roles>
+
+</Orchard>

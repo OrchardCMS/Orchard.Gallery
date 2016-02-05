@@ -1,0 +1,12 @@
+﻿Name: Orchard Gallery
+AntiForgery: enabled
+Author: Orchard Team
+Website: 
+Version: 0.1.0
+OrchardVersion: 0.1.0
+Description: Gallery website for Orchard modules and themes
+Features:
+    Orchard.Gallery:        
+        Description: Gallery website for Orchard modules and themes.        
+        Category: Packaging
+        Dependencies: Orchard.Taxonomies, Lucene, Orchard.Tags, Orchard.Indexing, Containers
