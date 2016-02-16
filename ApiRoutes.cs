@@ -23,6 +23,16 @@ public class ApiRoutes : IHttpRouteProvider {
                 },
             },
             new HttpRouteDescriptor {
+                Name = "FeedService2",
+                Priority = -10,
+                RouteTemplate = "api/FeedService/Packages",
+                Defaults = new {
+                    area = "Orchard.Gallery",
+                    controller = "FeedService",
+                    action = "GetPackages"
+                },
+            },
+            new HttpRouteDescriptor {
                 Name = "FeedServiceCount",
                 Priority = -10,
                 RouteTemplate = "api/FeedService/Packages()/$count",
