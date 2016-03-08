@@ -107,20 +107,32 @@ namespace Orchard.Gallery.Controllers {
             return "";
         }
 
+        private string GetPackageId(string filter) {
+
+            // tolower(Id) eq 'orchard.module.contrib.googleanalytics'
+            var index = filter.IndexOf("tolower(Id) eq ");
+            if (index != -1) {
+                return filter.Substring(index + 15).Replace("'", "");
+            }
+
+            return null;
+        }
+
         private string GetSearchTerms(string filter) {
+            string q = "";
+            int end;
+            
             var index = filter.IndexOf("substringof('");
-            if (index == -1) {
-                return "";
+            if (index != -1) {
+                end = filter.IndexOf("'", index + 13);
+
+                q = filter.Substring(index + 13, end - index - 13);
+
+                if(q == "null") {
+                    return "";
+                }
             }
-
-            var end = filter.IndexOf("'", index + 13);
-
-            var q = filter.Substring(index + 13, end - index - 13);
-
-            if(q == "null") {
-                return "";
-            }
-
+            
             return q;
         }
 
@@ -132,6 +144,7 @@ namespace Orchard.Gallery.Controllers {
 
             var q = GetSearchTerms(filter);
             var type = GetExtensionType(filter);
+            var packageId = GetPackageId(filter);
 
             if (!String.IsNullOrWhiteSpace(q)) {
                 searchBuilder.Parse(
@@ -143,6 +156,11 @@ namespace Orchard.Gallery.Controllers {
 
             if (!String.IsNullOrWhiteSpace(type)) {
                 searchBuilder.WithField("package-extension-type", type.ToLowerInvariant()).NotAnalyzed().ExactMatch();
+            }
+
+            if (!String.IsNullOrEmpty(packageId)) {
+                searchBuilder.WithField("package-id", packageId).ExactMatch();
+                searchBuilder.Slice(0, 1);
             }
 
             // Only apply custom order if there is no search filter. Otherwise some oddly related packages
