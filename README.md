@@ -4,9 +4,9 @@ The module contains all the code necessary to run a modules gallery for Orchard 
 
 To setup a gallery:
  - Download the module without enabling its feature
- - In the Recipes tab of the Modules amind page, run the Gallery recipe
+ - In the Recipes tab of the Modules admin page, run the Gallery recipe
 
-It will create the necessary content types and taxonommies. You can then browse the gallery urls or add packages and versions.
+It will create the necessary content types and taxonomies. You can then browse the gallery urls or add packages and versions.
 
 # Theming
 
