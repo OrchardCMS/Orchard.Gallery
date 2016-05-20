@@ -70,21 +70,27 @@ namespace Orchard.Gallery.Controllers {
 
             searchBuilder.WithField("package-extension-type", type.ToLowerInvariant()).NotAnalyzed().ExactMatch();
 
-            // Only apply custom order if there is no search filter. Otherwise some oddly related packages
-            // might appear at the top.
-            if (String.IsNullOrWhiteSpace(q) && !String.IsNullOrWhiteSpace(s)) {
-                switch (s) {
-                    case "download":
-                        searchBuilder.SortByInteger("package-download-count");
-                        break;
-                    default:
-                        // Order by relevance by default.
-                        break;
-                }
+            //// Only apply custom order if there is no search filter. Otherwise some oddly related packages
+            //// might appear at the top.
+            //if (String.IsNullOrWhiteSpace(q) && !String.IsNullOrWhiteSpace(s)) {
+            switch (s) {
+                case "created":
+                    searchBuilder.SortByDateTime("created");
+                    break;
+                case "title":
+                    searchBuilder.SortByInteger("title");
+                    searchBuilder.Ascending();
+                    break;
+                case "relevance":
+                    break;
+                default:
+                    searchBuilder.SortByInteger("package-download-count");
+                    break;
             }
-            else if(String.IsNullOrWhiteSpace(q) && String.IsNullOrWhiteSpace(s)) {
-                searchBuilder.SortByInteger("package-download-count");
-            }
+            //}
+            //else if(String.IsNullOrWhiteSpace(q) && String.IsNullOrWhiteSpace(s)) {
+            //    searchBuilder.SortByInteger("package-download-count");
+            //}
 
             var count = searchBuilder.Count();
             var pageOfResults = searchBuilder.Slice((pager.Page - 1) * pager.PageSize, pager.PageSize).Search();

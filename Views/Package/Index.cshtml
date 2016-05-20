@@ -1,21 +1,50 @@
 ﻿@{
     IEnumerable<object> searchResults = Model.ContentItems;
     Model.ContentItems.Classes.Add("content-items");
-}
 
-@if (Model.Type == "Module") {
-    <h1>@Html.TitleForPage(T("Modules"))</h1>
-}
-@if (Model.Type == "Theme") {
-    <h1>@Html.TitleForPage(T("Themes"))</h1>
-}
-
-@if (HasText(Model.Query)) {
-    if (!searchResults.Any()) { 
-        <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>zero</em> results", searchResults.Count())</p>
-    } else { 
-        <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>{1} - {2}</em> of <em>{0}</em> results", (int)Model.TotalItemCount, (int)Model.StartPosition, (int)Model.EndPosition)</p>
+    string packageType = string.Empty;
+    if (Model.Type == "Module") {
+        packageType = "Modules";
     }
+    else if (Model.Type == "Theme") {
+        packageType = "Themes";
+    }
+}
+
+<div class="pull-right">
+    <form action="@Url.Content("~/Packages/Modules")" method="get" class="form-group form-inline">
+        @*<input type="text" name="q" class="form-control" placeholder="Search @packageType" value="@Request.QueryString["q"]">
+        <input type="submit" class="btn btn-primary" value="@T("Search")">*@
+        <label class="control-label">@T("Sort")</label>
+        <select name="s" id="s">
+            <option value="title" @(Request.QueryString["s"] == "title" ? "selected" : "")>@T("A-Z")</option>
+            <option value="download" @(string.IsNullOrEmpty(Request.QueryString["s"]) || Request.QueryString["s"] == "download" ? "selected" : "")>@T("Most Popular")</option>
+            <option value="created" @(Request.QueryString["s"] == "created" ? "selected" : "")>@T("Newest")</option>
+            <option value="relevance" @(Request.QueryString["s"] == "relevance" ? "selected" : "")>@T("Relevance")</option>
+        </select>
+        <label class="control-label">@T("Show")</label>
+        <select name="pagesize" id="pagesize">
+            <option value="5" @(Request.QueryString["pagesize"] == "5" ? "selected" : "")>@T("5 per page")</option>
+            <option value="10" @(string.IsNullOrEmpty(Request.QueryString["pagesize"]) || Request.QueryString["pagesize"] == "10" ? "selected" : "")>@T("10 per page")</option>
+            <option value="15" @(Request.QueryString["pagesize"] == "15" ? "selected" : "")>@T("15 per page")</option>
+            <option value="25" @(Request.QueryString["pagesize"] == "25" ? "selected" : "")>@T("25 per page<")/option>
+            <option value="50" @(Request.QueryString["pagesize"] == "50" ? "selected" : "")>@T("50 per page")</option>
+        </select>
+        <input type="submit" class="btn btn-primary btn-xs" value="@T("Apply")">
+    </form>
+</div>
+<h1>
+    @if (searchResults.Any()) {
+        <span class="small">@searchResults.Count()@T(" results for")</span>
+    }
+    @Html.TitleForPage(T(packageType))
+</h1>
+
+@if (!searchResults.Any()) {
+    <p class="search-summary">@T.Plural("There is <em>one</em> result", "<em>zero</em> results", searchResults.Count())</p>
+}
+else {
+    <p class="search-summary">@T.Plural("There is <em>one</em> result", "Displaying results <em>{1} - {2}</em>.", (int)Model.TotalItemCount, (int)Model.StartPosition, (int)Model.EndPosition)</p>
 }
 
 @if (searchResults != null && searchResults.Any()) {
