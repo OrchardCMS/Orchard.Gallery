@@ -2,6 +2,8 @@
     IEnumerable<object> searchResults = Model.ContentItems;
     Model.ContentItems.Classes.Add("content-items");
 
+    Layout.NavBar.Add(New.SearchForm(), "6");
+
     string packageType = string.Empty;
     if (Model.Type == "Module") {
         packageType = "Modules";
@@ -12,7 +14,7 @@
 }
 
 <div class="pull-right">
-    <form action="@Url.Content("~/Packages/Modules")" method="get" class="form-group form-inline">
+    <form action="@Url.Content("~/Packages/" + packageType)" method="get" class="form-group form-inline">
         @*<input type="text" name="q" class="form-control" placeholder="Search @packageType" value="@Request.QueryString["q"]">
         <input type="submit" class="btn btn-primary" value="@T("Search")">*@
         <label class="control-label">@T("Sort")</label>
