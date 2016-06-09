@@ -78,7 +78,7 @@ namespace Orchard.Gallery.Controllers {
                     searchBuilder.SortByDateTime("created");
                     break;
                 case "title":
-                    searchBuilder.SortByInteger("title");
+                    searchBuilder.SortByString("title");
                     searchBuilder.Ascending();
                     break;
                 case "relevance":
