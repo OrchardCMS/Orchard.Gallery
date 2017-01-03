@@ -96,11 +96,11 @@ namespace Orchard.Gallery.Controllers {
         }
 
         private string GetExtensionType(string filter) {
-            if (filter.Contains("PackageType eq 'Module'")) {
+            if (filter.IndexOf("PackageType eq 'Module'", StringComparison.OrdinalIgnoreCase) != -1) {
                 return "Module";
             }
 
-            if (filter.Contains("PackageType eq 'Theme'")) {
+            if (filter.IndexOf("PackageType eq 'Theme'", StringComparison.OrdinalIgnoreCase) != -1) {
                 return "Theme";
             }
 
@@ -110,9 +110,26 @@ namespace Orchard.Gallery.Controllers {
         private string GetPackageId(string filter) {
 
             // tolower(Id) eq 'orchard.module.contrib.googleanalytics'
-            var index = filter.IndexOf("tolower(Id) eq ");
+            var index = filter.IndexOf("tolower(Id) eq ", StringComparison.OrdinalIgnoreCase);
             if (index != -1) {
                 return filter.Substring(index + 15).Replace("'", "");
+            }
+
+            index = filter.IndexOf("Id eq ", StringComparison.OrdinalIgnoreCase);
+            if (index != -1) {
+                return filter.Substring(index + 6).Replace("'", "");
+            }
+
+            return null;
+        }
+
+        private string GetVersion(string filter)
+        {
+
+            // Version eq '1.2'
+            var index = filter.IndexOf("Version eq ", StringComparison.OrdinalIgnoreCase);
+            if (index != -1) {
+                return filter.Substring(index + 1).Replace("'", "");
             }
 
             return null;
@@ -122,7 +139,7 @@ namespace Orchard.Gallery.Controllers {
             string q = "";
             int end;
             
-            var index = filter.IndexOf("substringof('");
+            var index = filter.IndexOf("substringof('", StringComparison.OrdinalIgnoreCase);
             if (index != -1) {
                 end = filter.IndexOf("'", index + 13);
 
@@ -145,6 +162,7 @@ namespace Orchard.Gallery.Controllers {
             var q = GetSearchTerms(filter);
             var type = GetExtensionType(filter);
             var packageId = GetPackageId(filter);
+            var version = GetVersion(filter);
 
             if (!String.IsNullOrWhiteSpace(q)) {
                 searchBuilder.Parse(
@@ -154,15 +172,18 @@ namespace Orchard.Gallery.Controllers {
                 );
             }
 
-            if (!String.IsNullOrWhiteSpace(type)) {
-                searchBuilder.WithField("package-extension-type", type.ToLowerInvariant()).NotAnalyzed().ExactMatch();
-            }
-
+            
             if (!String.IsNullOrEmpty(packageId)) {
+
                 searchBuilder.WithField("package-id", packageId).ExactMatch();
                 searchBuilder.Slice(0, 1);
             }
 
+            if (!String.IsNullOrWhiteSpace(type)) {
+                searchBuilder.WithField("package-extension-type", type.ToLowerInvariant()).NotAnalyzed().AsFilter().ExactMatch();
+            }
+
+            
             // Only apply custom order if there is no search filter. Otherwise some oddly related packages
             // might appear at the top.
             if (String.IsNullOrWhiteSpace(q) && !String.IsNullOrWhiteSpace(orderby)) {
